@@ -1,4 +1,4 @@
-package _4_정렬;
+package 프로그래머스._4_정렬;
 
 import java.util.Arrays;
 

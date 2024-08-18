@@ -1,4 +1,4 @@
-package _5_완전탐색;
+package 프로그래머스._5_완전탐색;
 
 import java.util.Arrays;
 import java.util.Comparator;

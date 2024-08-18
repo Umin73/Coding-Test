@@ -1,4 +1,4 @@
-package _2_스택큐;
+package 프로그래머스._2_스택큐;
 
 import java.util.*;
 

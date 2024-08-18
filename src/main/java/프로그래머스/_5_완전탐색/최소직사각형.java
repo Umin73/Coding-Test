@@ -1,4 +1,4 @@
-package _5_완전탐색;
+package 프로그래머스._5_완전탐색;
 
 public class 최소직사각형 {
     public static void main(String[] args) {

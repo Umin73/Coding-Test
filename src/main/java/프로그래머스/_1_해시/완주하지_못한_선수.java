@@ -1,4 +1,4 @@
-package _1_해시;
+package 프로그래머스._1_해시;
 
 import java.util.HashMap;
 
