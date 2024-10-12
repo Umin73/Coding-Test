@@ -1,50 +1,54 @@
 package 백준;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class _2606 {
 
-    static ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
-    static boolean[] check = new boolean[10001];
+    static boolean[][] graph;
+    static boolean[] visited;
+    static int N, M;
+    static int answer;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int com = sc.nextInt();
-        int conn = sc.nextInt();
+   public static void main(String[] args) throws IOException {
 
-        for (int i = 0; i <= com; i++) {
-            list.add(new ArrayList<Integer>());
-            check[i] = false;
-        }
+       // 0. 입력 및 초기화
+       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+       BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i = 0; i < conn; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            list.get(a).add(b);
-            list.get(b).add(a);
-        }
+       N = Integer.parseInt(br.readLine());
+       M = Integer.parseInt(br.readLine());
 
-        Queue<Integer> queue = new LinkedList<Integer>();
-        queue.add(1);
+       graph = new boolean[N+1][N+1];
+       visited = new boolean[N+1];
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
+       // 1. graph에 연결 정보 채우기
+       int x, y;
+       for (int i = 0; i < M; i++) {
+           StringTokenizer st = new StringTokenizer(br.readLine());
+           x = Integer.parseInt(st.nextToken());
+           y = Integer.parseInt(st.nextToken());
+           graph[x][y] = true;
+           graph[y][x] = true;
+       }
 
-            for (int i = 0; i < list.get(cur).size(); i++) {
-                if (!check[list.get(cur).get(i)]) {
-                    queue.offer(list.get(cur).get(i));
-                    check[list.get(cur).get(i)] = true;
-                }
-            }
-        }
+       // 2. dfs(재귀함수) 호출
+       dfs(1);
 
-        int answer = 0;
-        for (int i = 2; i <= com; i++) {
-            if(check[i]) answer++;
-        }
-        System.out.println(answer);
+       // 3. 출력
+       bw.write(String.valueOf(answer - 1));
+
+       br.close();
+       bw.close();
+   }
+
+    private static void dfs(int idx) {
+         visited[idx] = true;
+         answer++;
+
+         for(int i = 1; i <= N; i++) {
+             if(!visited[i] && graph[idx][i]) dfs(i);
+         }
     }
+
 }
