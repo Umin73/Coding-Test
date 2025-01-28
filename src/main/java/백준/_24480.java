@@ -2,17 +2,15 @@ package 백준;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
-public class _24479 {
-
-    static int SIZE = 100001;
+public class _24480 {
+    static int MAX = 100001;
     static int N, M, R;
     static ArrayList<Integer>[] graph;
-    static boolean[] visited;
-    static int[] answer;
+    static boolean []visited;
+    static int []answer;
     static int order = 1;
 
     public static void main(String[] args) throws IOException {
@@ -25,15 +23,15 @@ public class _24479 {
         M = Integer.parseInt(st.nextToken());
         R = Integer.parseInt(st.nextToken());
 
-        graph = new ArrayList[SIZE];
-        visited = new boolean[SIZE];
-        answer = new int[SIZE];
+        graph = new ArrayList[MAX];
+        visited = new boolean[MAX];
+        answer = new int[MAX];
 
         for(int i = 0; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        int u, v;
+        int u,v;
         for(int i = 1; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             u = Integer.parseInt(st.nextToken());
@@ -44,7 +42,7 @@ public class _24479 {
         }
 
         for(int i = 1; i <= N; i++) {
-            Collections.sort(graph[i]);
+            Collections.sort(graph[i], Collections.reverseOrder());
         }
 
         dfs(R);
@@ -57,7 +55,6 @@ public class _24479 {
         bw.flush();
         bw.close();
         br.close();
-
     }
 
     static void dfs(int idx) {
@@ -66,8 +63,9 @@ public class _24479 {
             visited[idx] = true;
             answer[idx] = order++;
 
-            for(int i=0; i<graph[idx].size(); i++) {
-                if(!visited[graph[idx].get(i)]) dfs(graph[idx].get(i));
+            for(int i = 0; i < graph[idx].size(); i++) {
+                int next = graph[idx].get(i);
+                if(!visited[next]) dfs(next);
             }
         }
     }
