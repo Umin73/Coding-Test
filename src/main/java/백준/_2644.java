@@ -1,63 +1,62 @@
 package 백준;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class _2644 {
-    static ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-    static boolean[] check = new boolean[10001];
-    static int n, me, you, relation;
-    static int answer = -1;
+   final static int MAX = 101;
+   static boolean[][] graph;
+   static boolean[] visited;
+   static int N, p1, p2, M;
+   static int answer = -1;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        me = sc.nextInt();
-        you = sc.nextInt();
-        relation = sc.nextInt();
+   public static void main(String[] args) throws IOException {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i = 0; i <= n; i++) {
-            list.add(new ArrayList<Integer>());
-            check[i] = false;
-        }
+      N = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < relation; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            list.get(a).add(b);
-            list.get(b).add(a);
-        }
-        dfs(me);
+      StringTokenizer st = new StringTokenizer(br.readLine());
+      p1 = Integer.parseInt(st.nextToken());
+      p2 = Integer.parseInt(st.nextToken());
 
-        System.out.println(answer);
-    }
+      M = Integer.parseInt(br.readLine());
 
-    static void dfs(int start){
-        Queue<Integer> q = new LinkedList<Integer>();
-        q.offer(start);
-        while (!q.isEmpty()){
-            int cur = q.poll();
-            for(int i=0; i<list.get(cur).size(); i++){
-                int next = list.get(cur).get(i);
-                if(!check[next]){
-                    q.offer(next);
-                    check[next] = true;
+      graph = new boolean[MAX][MAX];
+      visited = new boolean[MAX];
+      int x, y;
+      for(int i=0; i<M; i++) {
+         st = new StringTokenizer(br.readLine());
+         x = Integer.parseInt(st.nextToken());
+         y = Integer.parseInt(st.nextToken());
 
-                    if(next == you){
-                        answer = 1;
-                        return;
-                    }
+         graph[x][y] = true;
+         graph[y][x] = true;
+      }
 
-                    dfs(next);
-                    if(check[you]){
-                        answer++;
-                        return;
-                    }
-                }
-            }
-        }
-        return;
-    }
+
+      dfs(p1, 0);
+
+      bw.write(String.valueOf(answer));
+      bw.flush();
+
+      bw.close();
+      br.close();
+
+   }
+
+   static void dfs(int idx, int cnt) {
+      visited[idx] = true;
+
+      if(idx == p2) {
+         answer = cnt;
+         return;
+      }
+
+      for(int i=1; i<=N; i++) {
+         if(!visited[i] && graph[idx][i]) {
+            dfs(i, cnt+1);
+         }
+      }
+   }
 }
