@@ -5,24 +5,23 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class _11725 {
-
     final static int MAX = 100001;
+    static int N;
     static ArrayList<Integer>[] graph;
     static boolean[] visited;
     static int[] answer;
-    static int N;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         N = Integer.parseInt(br.readLine());
 
-        graph = new ArrayList[MAX];
         visited = new boolean[MAX];
         answer = new int[MAX];
-        for (int i = 1; i <= N; i++) {
+        graph = new ArrayList[MAX];
+        for(int i=1;i<=N; i++) {
             graph[i] = new ArrayList<>();
         }
 
@@ -36,7 +35,7 @@ public class _11725 {
             graph[y].add(x);
         }
 
-        dfs(1);
+        dfs(1, 0);
 
         for(int i=2; i<=N; i++) {
             bw.write(String.valueOf(answer[i]));
@@ -47,18 +46,16 @@ public class _11725 {
         bw.close();
         br.close();
 
-
     }
 
-    static void dfs(int idx) {
+    static void dfs(int idx, int parents) {
         visited[idx] = true;
+        answer[idx] = parents;
 
-        for(int i = 0; i<graph[idx].size(); i++) {
+        for(int i=0; i<graph[idx].size(); i++) {
             int next = graph[idx].get(i);
-
             if(!visited[next]) {
-                answer[next] = idx; // 다음에 방문할 노드의 부모는 현재 노드
-                dfs(next);
+                dfs(next, idx);
             }
         }
     }
