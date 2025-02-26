@@ -6,7 +6,7 @@ import java.util.*;
 public class _1764 {
     static int N, M;
     static Set<String> set = new HashSet<String>();
-    static TreeSet<String> answer = new TreeSet<String>();
+    static ArrayList<String> answer = new ArrayList<String>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -16,8 +16,7 @@ public class _1764 {
         M = Integer.parseInt(st.nextToken());
 
         for(int i=0;i<N;i++) {
-            String name = br.readLine();
-            set.add(name);
+            set.add(br.readLine());
         }
         for(int i=0;i<M;i++) {
             String name = br.readLine();
@@ -25,6 +24,8 @@ public class _1764 {
                 answer.add(name);
             }
         }
+
+        Collections.sort(answer);
 
         bw.write(answer.size() + "\n");
         for(String s : answer) {
