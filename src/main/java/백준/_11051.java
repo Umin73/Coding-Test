@@ -1,45 +1,37 @@
 package 백준;
 
-import java.io.*;
-import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class _11051 {
-    static int T, N;
-    static int[] stockPriceArr;
-    static int answer;
+    static int N, K;
+    static int[][] dp;
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
+        String[] input = br.readLine().split(" ");
+        N = Integer.parseInt(input[0]);
+        K = Integer.parseInt(input[1]);
 
-        T = Integer.parseInt(br.readLine());
+        dp = new int[N+1][K+1];
 
-        for(int i=0; i<T; i++) {
-            answer = 0;
-            N = Integer.parseInt(br.readLine());
-
-            stockPriceArr = new int[N];
-            st = new StringTokenizer(br.readLine());
-            for(int j=0; j<N; j++) {
-                stockPriceArr[j] = Integer.parseInt(st.nextToken());
-            }
-
-            int max = stockPriceArr[N-1];
-            for(int j=N-2; j>=0; j--) {
-                if(stockPriceArr[j] > max) {
-                    max = stockPriceArr[j];
-                }
-                else {
-                    answer += (max - stockPriceArr[j]);
-                }
-            }
-
-            bw.write(String.valueOf(answer) + "\n");
+        for (int i = 0; i <= N; i++) {
+            dp[i][0] = 1;
         }
 
+        for (int i=1;i<=N;i++) {
+            for(int j=1; j<=K;j++) {
+                if(i == j) {
+                    dp[i][j] = 1;
+                }else {
+                    dp[i][j] = (dp[i-1][j-1] + dp[i-1][j]) % 10007;
+                }
+            }
+        }
+
+        System.out.println(dp[N][K]);
+
         br.close();
-        bw.close();
     }
 }
