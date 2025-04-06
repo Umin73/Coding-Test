@@ -1,107 +1,64 @@
 package 백준;
 
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class _2667 {
-
-    static class Home {
-        private int x;
-        private int y;
-        private int homeNum;
-
-        public Home(int x, int y, int homeNum) {
-            this.x = x;
-            this.y = y;
-            this.homeNum = homeNum;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public int getHomeNum() {
-            return homeNum;
-        }
-    }
-
     static int N;
-    static int[][] map = new int[25][25];
-    static boolean[][] visited = new boolean[25][25];
-    static int curHomeNum = 1;
-    static ArrayList<Integer> answerList = new ArrayList<Integer>();
+    static int[][] map;
+    static boolean[][] visited;
+    static int cnt = 0; // 단지 수
+    static List<Integer> homeCntList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
+    static void dfs(int i, int j, int listIdx) {
+        if(visited[i][j]) return;
 
-        Home first = null;
-        for (int i = 0; i < N; i++) {
-            String input = sc.next();
-            for (int j = 0; j < N; j++) {
-                map[i][j] = input.charAt(j) - '0';
-                if(map[i][j] == 1) {
-                    if(first == null) first = new Home(j, i, 1);
-
-                }
+        if(map[i][j] == 1) {
+            visited[i][j] = true;
+            homeCntList.set(listIdx, homeCntList.get(listIdx)+1);
+            if(i > 0 && i <= N && j > 0 && j <= N) {
+                dfs(i+1, j, listIdx);
+                dfs(i-1, j, listIdx);
+                dfs(i, j+1, listIdx);
+                dfs(i, j-1, listIdx);
             }
-        }
-
-        if(first != null) bfs(first);
-
-        System.out.println(curHomeNum);
-        Collections.sort(answerList);
-        for (int i = 0; i < curHomeNum; i++) {
-            System.out.println(answerList.get(i));
         }
     }
 
-    static void bfs(Home first) {
-        int curX = first.getX();
-        int curY = first.getY();
-        int[] xArr = {-1, 0, 1, 0};
-        int[] yArr = {0, 1, 0, -1};
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
 
-        Queue<Home> q = new LinkedList<Home>();
-        q.offer(first);
-        visited[curY][curX] = true;
-        answerList.add(1);
+        map = new int[N+2][N+2];
+        visited = new boolean[N+2][N+2];
+        for(int i=1;i<=N;i++) {
+            String input = br.readLine();
+            for(int j=1; j<=N; j++) {
+                map[i][j] = input.charAt(j-1) - '0';
+            }
+        }
 
-        while(!q.isEmpty()) {
-            Home cur = q.poll();
-            curX = cur.getX();
-            curY = cur.getY();
-
-            for(int i = 0; i < 4; i++) {
-                int nextX = cur.getX() + xArr[i];
-                int nextY = cur.getY() + yArr[i];
-
-                if(nextX < 0 || nextY < 0 || nextX >= N || nextY >= N) continue;
-                if(map[nextY][nextX] == 1 && !visited[nextY][nextX]) {
-                    q.offer(new Home(nextX, nextY, curHomeNum));
-                    visited[nextY][nextX] = true;
-                    answerList.set(curHomeNum-1, answerList.get(curHomeNum-1) + 1);
+        int listIdx = 0;
+        for(int i=1;i<=N;i++) {
+            for(int j=1;j<=N;j++) {
+                if(!visited[i][j] && map[i][j] == 1) {
+                    cnt++;
+                    homeCntList.add(0);
+                    dfs(i, j, listIdx++);
                 }
             }
         }
 
-        Home next = findNextHome(++curHomeNum);
-        if(next != null) bfs(next);
-        else return;
-    }
-
-    static Home findNextHome(int nextHomeNum) {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if(map[i][j] == 1 && !visited[i][j]) {
-                    return new Home(j, i, nextHomeNum);
-                }
-            }
+        StringBuilder answer = new StringBuilder();
+        answer.append(cnt);
+        Collections.sort(homeCntList);
+        for (int l : homeCntList) {
+            answer.append("\n").append(l);
         }
-        --curHomeNum;
-        return null;
+        System.out.println(answer);
+
+        br.close();
     }
 }
