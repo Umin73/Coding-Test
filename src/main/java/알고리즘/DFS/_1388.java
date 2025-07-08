@@ -1,4 +1,4 @@
-package 문과생도_이해하는_DFS_알고리즘;
+package 알고리즘.DFS;
 
 import java.io.*;
 public class _1388 {
